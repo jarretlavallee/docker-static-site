@@ -1,0 +1,18 @@
+env:
+  global:
+    - COMMIT=${TRAVIS_COMMIT::8}
+    - REPO=jarretlavallee/static-site
+    - DOCKER_USERNAME=jarretlavallee
+    - secure: "LRUMEGtHB+hTYl+vxYN0YqRniDxl1UaP5W4B+Ai9265n5VVr5byAZ3BWTzA8rxLfB6o765A3RjYDy7vLx+7D1aczBzquUSCczB1/oyMlN7JhWFt0JcK+7yarb2Q1+XKzy2THosijFeNOIta8AdWuc4dLF3E3JdZpBqnu2dK9QUVYql8KZHEZtiSXcnZ3F8Jw1gtFw76K7oEAPLt2Cj/sLxq1FobykYsZZH77MTnWe8M+bfvoI2lmarba7n5/S+iwg8YqK5u+HOPERDztHuFfOF8cy5bKIiAIbwDhMKeny/9GqNvna9aVgUxIzrRXzlp1qzKqyJCxlaZJfrm76ULCu7FN8Nf7ppuKb4KY5j9BXAE9hgsPG0s5ptRQUwtF01MBvZ0ZC4WHKGnBI5JKdBTRLZ70aAkQ0MJb3q76n+CtJ9qrMnAA37mSMpdWvKi2ujwPVoMEg1Oya2JRhoMlDkpO3rReKYYB+mJB/lNGJ4th166IfXfyncAVb2AzxClE5reM5pKRS9UZLOxDshI+s4YZ0tt2vNVF7/WJPPTLLzrOFn/TIAPW5VOSvHCqilLbsWpOaRYq3BBI/drDIYRjjzN0ShwnTWEgsaUx+KWBZ5+927VAHhu1In+/b+hGUtqo3xZ2y7CjxUVcLS91UqQ+o7lH2+oUkBzLO7dH1g7Y/vzRJkg="
+
+services:
+  - docker
+
+script:
+  - docker build -t $REPO:latest .
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+      docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+      docker push $REPO;
+    fi
